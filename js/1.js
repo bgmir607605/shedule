@@ -1,137 +1,3 @@
-var block  = false;	
-	function saveChanges() {
-		if (!block){
-			block = true;
-			$("#button").html('<img src="3.gif">');
-			//DONE: Очистить файл с адресами    	
-			cleanFile();
-			//DONE: Запись в файл		
-			writeListToFile();
-			//DONE: в файл needUpdate.txt установить единицу
-			setNeedUpdate();
-			//DONE: в цикле проверять выполнеие обновления с интервалом в секунду
-			//DONE: при подтверждении обновления - вывести алерт
-			waitUpdate();
-		}
-		else {
-			alert('Пожалуйста,дождитесь сохранения предыдущих изменений');
-		}
-    }
-
-//* Очистка файла whiteIP.txt
-function cleanFile(){
-		$.ajax({
-			async: false,
-			type: "POST",
-			url: "./ajax/cleanWhiteIP.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При очистке файла произошла ошибка" );
-			}
-		});	
-};
-
-//* перебирает все адреса из класса разрешённых
-//*записывает их значения в файл whiteIP.txt
-function writeListToFile(){
-	$('.dropAddress').each(function(i,elem) {
-		$.ajax({
-			async: false,
-			type: "POST",
-			url: "./ajax/writeAddresses.php",
-			dataType:"text",
-			data: "address=" + elem.parentNode.id,
-			error: function () {	
-				alert( "При выполнении запроса произошла ошибка" );
-			}
-		});	
-	});
-};
-
-//* установка единицы в needUpdate.txt
-function setNeedUpdate(){
-		$.ajax({
-			async: false,
-			type: "POST",
-			url: "./ajax/setNeedUpdate.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При установке флага обновления произошла ошибка" );
-			}
-		});	
-};
-
-//* Ожидание выполнения обновления
-function waitUpdate(){
-	var flag;
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/waitUpdate.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				flag = response;
-			}
-	});
-	if (flag == 1){		
-					timerId = setTimeout(waitUpdate, 1000);
-				}
-				else {
-					reprintWhiteIP();
-					$("#button").html('Сохранить изменения');
-				};
-				
-};
-
-//Обновить на странице список адресов в соответствии с файлом whiteIP.txt
-function reprintWhiteIP(){
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/printWhiteIP.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При обновлении произошла ошибка" );
-			},
-			success: function (response) {
-				$("#whiteAddress").html(response);
-				block = false;
-			}
-	});
-
-}
-//////////////////////////////////////
-
-function changeAccess (el) {
-	if (el.getAttribute("class") == 'acceptAddress') {
-		$(el).removeClass("acceptAddress");
-    	$(el).addClass("dropAddress");
-    	$(el).html(' X ');
-    	$('#whiteAddress').append( $('#blackAddress>#' + el.parentNode.id + '') );
-	}
-	else {
-		$(el).removeClass("dropAddress");
-    	$(el).addClass("acceptAddress");
-    	$(el).html(' + ');
-    	$('#blackAddress').append( $('#whiteAddress>#' + el.parentNode.id + '') );
-	}
-
-
-};
-
-
-
-function acceptAddress(){
-	var address = $("#newAddress").val();
-	$("#whiteAddress").append('<div class="address" id="' + address + '">' + address + '<div class="dropAddress" onclick="changeAccess(this)"> X </div></div>');
-	$("#newAddress").val('');
-};
-
-/////////
-
 function addTeacher(){
 	var lastName = $("#lastName").val();
 	var firstName = $("#firstName").val();
@@ -146,7 +12,7 @@ function addTeacher(){
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#teachers').html(response);
+				showEntity('teacher');
 				$("#lastName").val('');
 				$("#firstName").val('');
 				$("#midName").val('');
@@ -168,7 +34,7 @@ function addDiscipline(){
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#disciplines').html(response);
+				showEntity('discipline');
 				$("#fullName").val('');
 				$("#shortName").val('');
 				$('#fullName').focus();
@@ -189,7 +55,7 @@ function addSpecialty(){
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#specialties').html(response);
+				showEntity('specialty');
 				$("#code").val('');
 				$("#name").val('');
 				$('#code').focus();
@@ -197,20 +63,6 @@ function addSpecialty(){
 	});
 }
 
-function showSpecialtyList() {
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/showSpecialtyList.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				$('#specialty').html(response);
-			}
-	});
-}
 
 function addGroup(){
 	var name = $("#name").val();
@@ -225,7 +77,7 @@ function addGroup(){
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#groups').html(response);
+				showEntity('group');
 				$("#name").val('');
 				$("#specialty").val('');
 				$('#name').focus();
@@ -233,87 +85,70 @@ function addGroup(){
 	});
 }
 
-//
 
-function showlName() {
+function addTeacherLoad(){
+	var teacher = $("#teacher").val();
+	var group = $("#group").val();
+	var discipline = $("#discipline").val();
 	$.ajax({
 			async: false,			
 			type: "POST",
-			url: "./ajax/showlName.php",
+			url: "./ajax/addEntity.php",
+			data: 'entity=teacherLoad&teacher=' + teacher + '&group=' + group + '&discipline=' + discipline,
 			dataType:"text",
 			error: function () {	
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#lastName').html(response);
+				showEntity('teacherLoad');
+				$("#teacher").val('');
+				$("#group").val('');
+				$("#discipline").val('');
+				$('#lName').focus();
+			}
+	});
+}
+//
+
+function showField(field) {
+	$.ajax({
+			async: false,			
+			type: "POST",
+			url: "./ajax/showList.php",
+			data: 'field=' + field,
+			dataType:"text",
+			error: function () {	
+				alert( "При считывании флага обновления произошла ошибка" );
+			},
+			success: function (response) {
+				$('#' + field).html(response);
 			}
 	});
 }
 
 //
 
-function showfName() {
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/showfName.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				$('#firstName').html(response);
-			}
-	});
-}
+
+
+
 
 //
 
-function showmName() {
+function showEntity(entity) {
 	$.ajax({
 			async: false,			
 			type: "POST",
-			url: "./ajax/showmName.php",
+			url: "./ajax/showEntity.php",
+			data: 'entity=' + entity,
 			dataType:"text",
 			error: function () {	
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#midName').html(response);
+				$('#' + entity).html(response);
 			}
 	});
+
 }
 
-//
 
-function showGroup() {
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/showGroup.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				$('#group').html(response);
-			}
-	});
-}
-
-//
-
-function showDiscipline() {
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/showDiscipline.php",
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				$('#discipline').html(response);
-			}
-	});
-}
