@@ -13,14 +13,8 @@ switch ($action) {
     case 'getDisciplines':
 		getDisciplines($mysqli);
         break;
-	case 'discipline':
-		showDiscipline($mysqli);
-        break;
-    case 'specialty':
-        showSpecialty($mysqli);
-        break;
-	case 'group':
-        showGroup($mysqli);
+	case 'addLesson':
+		addLesson($mysqli);
         break;
 };
 $mysqli->close();
@@ -36,6 +30,22 @@ function getDisciplines($mysqli){
 			echo '<option value="'.$row["id"].'">'.$row["shortName"].'</option>';
 		}
 		$result->free();
+	}
+};
+
+function addLesson($mysqli){
+	$date = $_POST["date"];
+	$teacherLoad = $_POST["teacherLoad"];
+	$type = $_POST["type"];
+	$number = $_POST["number"];
+	
+	$query = "insert into shedule (date, number, teacherLoadId, type) values
+	('".$date."', $number, $teacherLoad, '".$type."')";
+	if ($result = $mysqli->query($query)) {
+		/*while ($row = $result->fetch_assoc()) {
+			echo '<option value="'.$row["id"].'">'.$row["shortName"].'</option>';
+		}
+		$result->free();*/
 	}
 };
 

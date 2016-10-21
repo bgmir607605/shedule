@@ -127,13 +127,6 @@ function showField(field) {
 }
 
 //
-
-
-
-
-
-//
-
 function showEntity(entity) {
 	$.ajax({
 			async: false,			
@@ -150,5 +143,3 @@ function showEntity(entity) {
 	});
 
 }
-
-

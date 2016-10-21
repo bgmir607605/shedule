@@ -21,13 +21,13 @@
    <tr>
 	<td>1.</td>
 	<td><input checked class="totalCheck" id="1" type=checkbox onClick="ok(this)"> общ.</td>
-	<td><select id="lesson1" onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson1" onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    <tr>
     <td>-</td>
 	<td></td>
-	<td><select id="lesson1_2" disabled onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson1_2" disabled onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    
@@ -35,59 +35,58 @@
     <tr>
 	<td>2.</td>
 	<td><input checked class="totalCheck" id="2" type=checkbox onClick="ok(this)"> общ.</td>
-	<td><select id="lesson2" onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson2" onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    <tr>
     <td>-</td>
 	<td></td>
-	<td><select id="lesson2_2" disabled onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson2_2" disabled onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    
    <tr>
 	<td>3.</td>
 	<td><input checked class="totalCheck" id="3" type=checkbox onClick="ok(this)"> общ.</td>
-	<td><select id="lesson3" onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson3" onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    <tr>
     <td>-</td>
 	<td></td>
-	<td><select id="lesson3_2" disabled onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson3_2" disabled onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    
    <tr>
 	<td>4.</td>
 	<td><input checked class="totalCheck" id="4" type=checkbox onClick="ok(this)"> общ.</td>
-	<td><select id="lesson4" onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson4" onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    <tr>
     <td>-</td>
 	<td></td>
-	<td><select id="lesson4_2" disabled onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson4_2" disabled onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    
    <tr>
 	<td>5.</td>
 	<td><input checked class="totalCheck" id="5" type=checkbox onClick="ok(this)"> общ.</td>
-	<td><select id="lesson5" onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson5" onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    <tr>
     <td>-</td>
 	<td></td>
-	<td><select id="lesson5_2" disabled onFocus="getDisciplines(this)"></select></td>
+	<td><select class="lesson" id="lesson5_2" disabled onFocus="getDisciplines(this)"></select></td>
 	<td></td>
    </tr>
    
 </table>
-   
-	<div id="teachers">
-</div>
+<input type="button" value="Сохранить" onClick="saveShedule()">   
+
 </div>
 </body>
 </html>
