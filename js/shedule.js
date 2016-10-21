@@ -26,6 +26,7 @@ function ok(ch){
 }
 
 function saveShedule(){
+	var ok;
 	var dateShedule = $('#dateShedule').val();
 	var idTeacherLoad;
 	var type;
@@ -34,24 +35,40 @@ function saveShedule(){
 		if ($('#lesson' + number + '_2').prop("disabled")){
 			idTeacherLoad = $('#lesson' + number).val();
 			type = '';
-			addLesson(dateShedule, idTeacherLoad, type, number)
+			ok = addLesson(dateShedule, idTeacherLoad, type, number)
+			if (!ok){
+				alert('произошла ошибка');
+				return;
+			}
 		}
 		else {
 			type = 'I';
 			idTeacherLoad = $('#lesson' + number).val();
-			addLesson(dateShedule, idTeacherLoad, type, number)
+			ok = addLesson(dateShedule, idTeacherLoad, type, number)
+			if (!ok){
+				alert('произошла ошибка');
+				return;
+			}
 			
 			type = 'II';
 			idTeacherLoad = $('#lesson' + number + '_2').val();
-			addLesson(dateShedule, idTeacherLoad, type, number)
+			ok = addLesson(dateShedule, idTeacherLoad, type, number)
+			if (!ok){
+				alert('произошла ошибка');
+				return;
+			}
 		};
 	}
-	
+	clearLessons();
+	$('#group').val('');
+	alert('Расписание сохранено');
 }
 
 function addLesson(dateShedule, idTeacherLoad, type, number){
+	if(idTeacherLoad == null){return true;};
 	var post = 'action=addLesson&date=' + dateShedule + '&teacherLoad=' + idTeacherLoad;
-	post = post + '&type=' + type + '&number=' + number; 
+	post = post + '&type=' + type + '&number=' + number;
+	var ok;
 	$.ajax({
 			async: false,			
 			type: "POST",
@@ -59,8 +76,19 @@ function addLesson(dateShedule, idTeacherLoad, type, number){
 			data: post,
 			dataType:"text",
 			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
+				ok = false;
 			},
+			success: function (response) {
+				ok = true;
+			}
 	});
+	return ok;
 }
 
+function clearLessons(){
+	var number;
+	for (number = 1; number <= 5; number++){
+		$('#lesson' + number).val('');
+		$('#lesson' + number + '_2').val('');
+	}
+}           
