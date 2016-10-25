@@ -14,7 +14,7 @@
 <div id="content">
 	<h2>В процессе разработки</h2>
 	
-	<input type=date id="dateShedule"><br> <!--Дата-->
+	<input type=date id="dateShedule" onChange="getAvailableSedule()"><br> <!--Дата-->
 	<select id="group" onFocus="showField('group')" onChange="clearLessons()"></select><br> <!--Группа-->
 
 <table>
@@ -86,7 +86,7 @@
    
 </table>
 <input type="button" value="Сохранить" onClick="saveShedule()">   
-
+	<div id="test"></div>
 </div>
 </body>
 </html>
