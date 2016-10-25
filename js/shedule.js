@@ -48,6 +48,11 @@ function saveShedule(){
 	var idTeacherLoad;
 	var type;
 	var number;
+	ok = cleanOldShedule();
+	if (!ok){
+			alert('произошла ошибка');
+			return;
+			}
 	for (number = 1; number <= 5; number++){
 		if ($('#lesson' + number + '_2').prop("disabled")){
 			idTeacherLoad = $('#lesson' + number).val();
@@ -67,12 +72,14 @@ function saveShedule(){
 				return;
 			}
 			
-			type = 'II';
-			idTeacherLoad = $('#lesson' + number + '_2').val();
-			ok = addLesson(dateShedule, idTeacherLoad, type, number)
-			if (!ok){
-				alert('произошла ошибка');
-				return;
+			if (!$('#lesson' + number + '_2').prop("disabled")){
+				type = 'II';
+				idTeacherLoad = $('#lesson' + number + '_2').val();
+				ok = addLesson(dateShedule, idTeacherLoad, type, number)
+				if (!ok){
+					alert('произошла ошибка');
+					return;
+				}
 			}
 		};
 	}
@@ -152,4 +159,25 @@ function getAvailableSedule(){
 			
 		}
 	});
+}
+
+function cleanOldShedule(){
+	var groupId = $('#group').val();
+	var dateShedule = $('#dateShedule').val();
+	var post = 'action=cleanBeforeWrite&date=' + dateShedule + '&groupId=' + groupId;
+	var ok;
+	$.ajax({
+			async: false,			
+			type: "POST",
+			url: "./ajax/shedule.php",
+			data: post,
+			dataType:"text",
+			error: function () {	
+				ok = false;
+			},
+			success: function (response) {
+				ok = true;
+			}
+	});
+	return ok;
 }

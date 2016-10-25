@@ -22,6 +22,9 @@ switch ($action) {
 	case 'getJSON':
 		getJSON($mysqli);
         break;
+	case 'cleanBeforeWrite':
+		cleanBeforeWrite($mysqli);
+        break;
 
 };
 $mysqli->close();
@@ -143,5 +146,11 @@ echo json_encode($arrLoads);
 	
 };
 
+function cleanBeforeWrite($mysqli){
+	$groupId = $_POST["groupId"];
+	$date = $_POST["date"];
+	$query ="delete from shedule where teacherLoadId IN (select id from teacherLoad where groupId=$groupId) and date = '".$date."'";
+	$mysqli->query($query);
+};
 
 ?>
