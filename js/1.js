@@ -20,6 +20,23 @@ function addTeacher(){
 			}
 	});
 }
+
+function delTeacher(teacher){
+	$.ajax({
+			async: false,			
+			type: "POST",
+			url: "./ajax/deleteEntity.php",
+			data: 'entity=teacher&id=' + teacher.id,
+			dataType:"text",
+			error: function () {	
+				alert( "При считывании флага обновления произошла ошибка" );
+			},
+			success: function (response) {
+				showEntity('teacher')
+			}
+	});
+}
+
 //
 function addDiscipline(){
 	var fullName = $("#fullName").val();
@@ -110,6 +127,7 @@ function addTeacherLoad(){
 }
 //
 
+//Устанавливает список значений в комбобокс
 function showField(field) {
 	$.ajax({
 			async: false,			
@@ -126,7 +144,7 @@ function showField(field) {
 	});
 }
 
-//
+//Выводит список экземляров сущности из БД
 function showEntity(entity) {
 	$.ajax({
 			async: false,			

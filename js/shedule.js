@@ -1,4 +1,5 @@
-﻿function getDisciplines(el) {
+﻿//Добавляет в комбобокс список доступных для этой группы нагрузок
+function getDisciplines(el) {
 	var groupId = $('#group').val();
 	$.ajax({
 			async: false,			
@@ -15,7 +16,8 @@
 	});
 }
 
-function ok(ch){
+//Переключает тип пары {общ, I, II}
+function toogleTotal(ch){
 	if ($('#' + ch.id).prop("checked")){
 		$('#lesson' + ch.id + '_2').prop('disabled', true);
 	}
@@ -24,6 +26,8 @@ function ok(ch){
 	}
 }
 
+
+//Сохраняет расписание
 function saveShedule(){
 	var ok;
 	var dateShedule = $('#dateShedule').val();
@@ -32,9 +36,9 @@ function saveShedule(){
 	var number;
 	ok = cleanOldShedule();
 	if (!ok){
-			alert('произошла ошибка');
-			return;
-			}
+		alert('произошла ошибка');
+		return;
+	}
 	for (number = 1; number <= 5; number++){
 		if ($('#lesson' + number + '_2').prop("disabled")){
 			idTeacherLoad = $('#lesson' + number).val();
@@ -70,6 +74,7 @@ function saveShedule(){
 	alert('Расписание сохранено');
 }
 
+//Запись в БД рдного занятия
 function addLesson(dateShedule, idTeacherLoad, type, number){
 	if(idTeacherLoad == null){return true;};
 	var post = 'action=addLesson&date=' + dateShedule + '&teacherLoad=' + idTeacherLoad;
@@ -91,6 +96,7 @@ function addLesson(dateShedule, idTeacherLoad, type, number){
 	return ok;
 }
 
+//Очистка комбобоксов всех занятий
 function clearLessons(){
 	var number;
 	for (number = 1; number <= 5; number++){
@@ -99,6 +105,8 @@ function clearLessons(){
 	}
 }   
 
+//Получение у становка имеющегося в БД расписания
+//на выбранную дату и группу
 function getAvailableSedule(){
 	var date = $('#dateShedule').val();
 	var groupId = $('#group').val();
@@ -143,6 +151,8 @@ function getAvailableSedule(){
 	});
 }
 
+//Затирает в БД старое расписание на дату и группу
+//Вызывается перед записью нового расписания
 function cleanOldShedule(){
 	var groupId = $('#group').val();
 	var dateShedule = $('#dateShedule').val();

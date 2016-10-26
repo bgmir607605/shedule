@@ -1,8 +1,8 @@
-<?php
+ï»¿<?php
 require_once 'connectParams.php';
 $mysqli = new mysqli("localhost", $dbUser, $dbPass, $dbName);
 if ($mysqli->connect_errno) {
-    printf("Ñîåäèíåíèå íå óäàëîñü: %s\n", $mysqli->connect_error);
+    printf("Ã‘Ã®Ã¥Ã¤Ã¨Ã­Ã¥Ã­Ã¨Ã¥ Ã­Ã¥ Ã³Ã¤Ã Ã«Ã®Ã±Ã¼: %s\n", $mysqli->connect_error);
     exit();
 };
 $query = "set names utf8";
@@ -27,12 +27,12 @@ switch ($entity) {
 };
 $mysqli->close();
 
-//Ðåàëèçàöèÿ äëÿ êàæäîé ñóùíîñòè
+//ÃÃ¥Ã Ã«Ã¨Ã§Ã Ã¶Ã¨Ã¿ Ã¤Ã«Ã¿ ÃªÃ Ã¦Ã¤Ã®Ã© Ã±Ã³Ã¹Ã­Ã®Ã±Ã²Ã¨
 function showTeacher($mysqli){
 	$query = "SELECT * FROM teachers";
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
-			echo $row["lName"].' '.$row["fName"].' '.$row["mName"].'<br/>';
+			echo '<div>'.$row["lName"].' '.$row["fName"].' '.$row["mName"].'<span id ="'.$row["id"].'" onClick="delTeacher(this)"> Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ </span></div>';
 		}
     $result->free();
 	}
