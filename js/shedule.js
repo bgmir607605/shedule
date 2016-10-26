@@ -15,25 +15,7 @@
 	});
 }
 
-function setDisciplines(el) {
-	var groupId = $('#group').val();
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/shedule.php",
-			data: 'action=getDisciplines&groupId=' + groupId,
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				$(el).html(response);
-			}
-	});
-}
-
 function ok(ch){
-	
 	if ($('#' + ch.id).prop("checked")){
 		$('#lesson' + ch.id + '_2').prop('disabled', true);
 	}
@@ -115,17 +97,17 @@ function clearLessons(){
 		$('#lesson' + number).val('');
 		$('#lesson' + number + '_2').val('');
 	}
-	getAvailableSedule();
 }   
 
 function getAvailableSedule(){
 	var date = $('#dateShedule').val();
 	var groupId = $('#group').val();
+	clearLessons();
 	$.ajax({
 		async: false,			
 		type: "POST",
 		url: "./ajax/shedule.php",
-		data: 'action=getJSON&date=' + date + '&groupId=' + groupId,
+		data: 'action=getAvailable&date=' + date + '&groupId=' + groupId,
 		dataType:'json',
 		error: function () {	
 			alert('error');
@@ -136,24 +118,24 @@ function getAvailableSedule(){
 					if (response[key][3] == ''){//если общее занятие
 						$('#' + response[key][1]).prop("checked", true);
 						$('#lesson' + response[key][1] + '_2').prop('disabled', true);
-						setDisciplines('#lesson' + response[key][1]);
+						getDisciplines(document.getElementById('lesson' + response[key][1]));
 						$('#lesson' + response[key][1]).val(response[key][0]);
 					}
 					else{
 						if (response[key][3] == 'I'){//если первая подгруппа
 							$('#' + response[key][1]).prop("checked", false);
 							$('#lesson' + response[key][1] + '_2').prop('disabled', false);
-							setDisciplines('#lesson' + response[key][1]);
+							getDisciplines(document.getElementById('lesson' + response[key][1]));
 							$('#lesson' + response[key][1]).val(response[key][0]);
 						};
 						if (response[key][3] == 'II'){//если вторая подгруппа
 							$('#' + response[key][1]).prop("checked", false);
 							$('#lesson' + response[key][1] + '_2').prop('disabled', false);
-							setDisciplines('#lesson' + response[key][1] + '_2');
+							
+							getDisciplines(document.getElementById('lesson' + response[key][1] + '_2'));
 							$('#lesson' + response[key][1] + '_2').val(response[key][0]);
 						}
 					}
-   			 		console.log(response[key][1] + ') ' + response[key][2] + ' ' + response[key][3]);
   				} 
 			}
 			

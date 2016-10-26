@@ -19,9 +19,6 @@ switch ($action) {
     case 'getAvailable':
 		getAvailable($mysqli);
         break;
-	case 'getJSON':
-		getJSON($mysqli);
-        break;
 	case 'cleanBeforeWrite':
 		cleanBeforeWrite($mysqli);
         break;
@@ -30,11 +27,15 @@ switch ($action) {
 $mysqli->close();
 
 
+//Возвращает список нагрузок с именами дисциплин в комбобоксы при выставлении расписания
 function getDisciplines($mysqli){
 	$groupId = $_POST["groupId"];
 	$query = "SELECT teacherLoad.id, discipline.shortName FROM `teacherLoad` 
 	join discipline on discipline.id = teacherLoad.disciplineId 
-	WHERE teacherLoad.groupId=".$groupId."";
+	WHERE teacherLoad.groupId=".$groupId." order by discipline.shortName";
+	//Печатаем пустое значение
+	echo '<option value=""></option>';
+	//Печатаем имеющиеся результаты
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
 			echo '<option value="'.$row["id"].'">'.$row["shortName"].'</option>';
@@ -43,6 +44,7 @@ function getDisciplines($mysqli){
 	}
 };
 
+//Записывает пару в БД
 function addLesson($mysqli){
 	$date = $_POST["date"];
 	$teacherLoad = $_POST["teacherLoad"];
@@ -51,23 +53,19 @@ function addLesson($mysqli){
 	
 	$query = "insert into shedule (date, number, teacherLoadId, type) values
 	('".$date."', $number, $teacherLoad, '".$type."')";
-	if ($result = $mysqli->query($query)) {
-		/*while ($row = $result->fetch_assoc()) {
-			echo '<option value="'.$row["id"].'">'.$row["shortName"].'</option>';
-		}
-		$result->free();*/
-	}
+	$mysqli->query($query);
 };
 
-function getAvailable($mysqli){
+//Возвращает JSON с имеющимся расписанием по группе и дате
+function getAvailable($mysqli){ 
 	$groupId = $_POST["groupId"];
     $date = $_POST["date"];
     
 	//Получаем список нагрузок по указанной группе и дате
 	$i = 0;
     $query = "select `teacherLoadId`, `number`, `type` from `shedule` where `teacherLoadId` 
-    IN (select `id` from `teacherLoad` 
-    where `groupId` ='" . $groupId . "') and `date` = '" . $date . "' ORDER BY `number`";
+    IN (select `id` from `teacherLoad` where `groupId` ='" . $groupId . "') 
+	and `date` = '" . $date . "' ORDER BY `number`";
 	if ($result = $mysqli->query($query)) {
         while ($row = $result->fetch_assoc()){
 		    $arrLoads[$i][0] = $row['teacherLoadId'];
@@ -77,75 +75,11 @@ function getAvailable($mysqli){
 		}
         $result->free();
     }
-	if (count($arrLoads) == 0){
-		echo "Нет занятий";
-	}
-	else {
-		echo "Расписание на $date  группа $group <br>";
-		for ($j = 0; $j <= count($arrLoads); $j++){
-            $query = "SELECT shortName FROM discipline WHERE id IN (SELECT disciplineId FROM teacherLoad where id = '".$arrLoads[$j][0] . "' )";
-			if ($result = $mysqli->query($query)) {
-                while ($row = $result->fetch_assoc()){
-				    $arrLoads[$j][2] = $row['shortName'];
-				}
-                $result->free();
-			}	
-        }
-		foreach ($arrLoads as $v1){
-			echo "<br>" . $v1["1"] . ") " . $v1["2"] . " " . $v1["3"];
-			}
-		}
+	
+	echo json_encode($arrLoads);
 };
 
-function getJSON($mysqli){
-/*$z['object_or_array'] = "string value";
-$z['empty'] = false;
-$z['parse_time_nanoseconds'] = 19608;
-$z['validate'] = true;
-$z['size'] = 1;*/
- 
-$groupId = $_POST["groupId"];
-    $date = $_POST["date"];
-    
-	//Получаем список нагрузок по указанной группе и дате
-	$i = 0;
-    $query = "select `teacherLoadId`, `number`, `type` from `shedule` where `teacherLoadId` 
-    IN (select `id` from `teacherLoad` 
-    where `groupId` ='" . $groupId . "') and `date` = '" . $date . "' ORDER BY `number`";
-	if ($result = $mysqli->query($query)) {
-        while ($row = $result->fetch_assoc()){
-		    $arrLoads[$i][0] = $row['teacherLoadId'];
-		    $arrLoads[$i][1] = $row['number'];
-		    $arrLoads[$i][3] = $row['type'];
-		    $i++;
-		}
-        $result->free();
-    }
-	if (count($arrLoads) == 0){
-		//	echo "Нет занятий";
-	}
-	else {
-		//echo "Расписание на $date  группа $group <br>";
-		for ($j = 0; $j <= count($arrLoads); $j++){
-            $query = "SELECT shortName FROM discipline WHERE id IN (SELECT disciplineId FROM teacherLoad where id = '".$arrLoads[$j][0] . "' )";
-			if ($result = $mysqli->query($query)) {
-                while ($row = $result->fetch_assoc()){
-				    $arrLoads[$j][2] = $row['shortName'];
-				}
-                $result->free();
-			}	
-        }
-		/*foreach ($arrLoads as $v1){
-			echo "<br>" . $v1["1"] . ") " . $v1["2"] . " " . $v1["3"];
-			}*/
-		}	
-	
-	
-echo json_encode($arrLoads);
-
-	
-};
-
+//Удаляет стаые записи по заданной групе и дате перед записью новых значений
 function cleanBeforeWrite($mysqli){
 	$groupId = $_POST["groupId"];
 	$date = $_POST["date"];

@@ -15,7 +15,7 @@
 	<h2>В процессе разработки</h2>
 	
 	<input type=date id="dateShedule" onChange="getAvailableSedule()"><br> <!--Дата-->
-	<select id="group" onFocus="showField('group')" onChange="clearLessons()"></select><br> <!--Группа-->
+	<select id="group" onFocus="showField('group')" onChange=getAvailableSedule()></select><br> <!--Группа-->
 
 <table>
    <tr>
