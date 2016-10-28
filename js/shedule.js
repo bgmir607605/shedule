@@ -1,4 +1,34 @@
-﻿//Добавляет в комбобокс список доступных для этой группы нагрузок
+﻿function exportExcel(){
+	var date = $('#dateShedule').val();
+	if (date != ''){
+		window.location = "http://server-admin.bpt.loc/shedule/excel/test.php?date=" + date;
+	}
+	else {
+		alert('укажите дату');
+	}
+	
+}
+
+function getGroups(){
+	var curValue = $('#group').val();
+	$.ajax({
+			async: false,			
+			type: "POST",
+			url: "./ajax/shedule.php",
+			data: 'action=showGroup',
+			dataType:"text",
+			error: function () {	
+				alert( "При считывании флага обновления произошла ошибка" );
+			},
+			success: function (response) {
+				$('#group').html(response);
+			}
+	});
+	$('#group').val(curValue);
+	
+}
+
+//Добавляет в комбобокс список доступных для этой группы нагрузок
 function getDisciplines(el) {
 	var groupId = $('#group').val();
 	$.ajax({
@@ -108,6 +138,7 @@ function clearLessons(){
 //Получение у становка имеющегося в БД расписания
 //на выбранную дату и группу
 function getAvailableSedule(){
+	
 	var date = $('#dateShedule').val();
 	var groupId = $('#group').val();
 	clearLessons();

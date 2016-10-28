@@ -7,15 +7,14 @@
 require_once 'Classes/PHPExcel.php';
 
 class GroupShedule{
-	function GroupShedule($group, $date, $iRow){
+	function GroupShedule($group, $date, $iRow, $tempFile){
 		$this->id = $group["id"];
 		$this->name = $group["name"];
-		$phpexcel = PHPExcel_IOFactory::load('test.xlsx'); // Создаём объект PHPExcel
+		$phpexcel = PHPExcel_IOFactory::load($tempFile); // Создаём объект PHPExcel
 		$page = $phpexcel->setActiveSheetIndex(0); // Делаем активной первую страницу и получаем её
 		$page->setCellValue("A".$iRow, $this->name); 
-		$page->setCellValue("A20", $date);
-		$page->setCellValue("E".$iRow, $this->id);
-		////////
+		
+
 		$day = $date;
 		$groupId = $group["id"]; 
 
@@ -46,21 +45,79 @@ class GroupShedule{
 				$result->free();
     		}	
 		}	
+		
+		$bufNum='';//Номер пары в буфере
+		$bufContent='';//Содержимое ячейки в буфере
+		$toWrite='';//Данные для записи
+		
 		foreach ($arrLoads as $v1){
-			
-			//1 - номер пары
-			//2 - Название дисциплины
-			//3 - Тип занятия
-			
-			$cell = $this->getCellname($v1["1"], $iRow);
+			$number = $v1["1"];
 			$discipline = $v1["2"];
 			$type = $v1["3"];
-			$page->setCellValue($cell, $discipline.' '.$type);
+			
+			
+			
+			if ($bufContent != ''){//Если в буфере не пусто
+				if ($bufNum == $number){//И если номер текущей пары совпадает с номером пары в буфере
+					//В буфере I п/г, текущая II
+					$toWrite = $bufContent.'   '.$discipline.' '.$type;//Склеиваем буфер и текущую пару
+					$cell = $this->getCellname($number, $iRow);
+					$page->setCellValue($cell, $toWrite);//И записываем в ячейку
+					$bufContent = '';//Очищаем буфер
+					$bufNum = '';//Очищаем буфер
+				}
+				else{//Номера пар не совпадают
+					//Пишем то что было в буфере
+					$cell = $this->getCellname($bufNum, $iRow);//чейка, куда писать
+					$toWrite = $bufContent;//Что писать
+					$page->setCellValue($cell, $toWrite);//И записываем в ячейку
+					$bufContent = '';//Очищаем буфер
+					$bufNum = '';//Очищаем буфер
+					//Дублируем решение для ситуации с пустывм буфером
+					////////////////////////////////////
+					if($type == 'I'){//Если I п/г
+						$bufContent = $discipline.' '.$type;//Откладываем в буфер значение
+						$bufNum = $number;//и адрес ячейки на случай если паралельно занимается II п/г
+					}
+					else{//II п/г и общ
+						//сразу пишем
+						$cell = $this->getCellname($number, $iRow);//чейка, куда писать
+						$toWrite = $discipline.' '.$type;//Что писать
+						$page->setCellValue($cell, $toWrite);//И записываем в ячейку
+					}
+					////////////////////////////////////
+				}
+			}
+			else{//Если буфер пустой
+				
+				if($type == 'I'){//Если I п/г
+					$bufContent = $discipline.' '.$type;//Откладываем в буфер значение
+					$bufNum = $number;//и адрес ячейки на случай если паралельно занимается II п/г
+				}
+				else{//II п/г и общ
+					//сразу пишем
+					$cell = $this->getCellname($number, $iRow);//чейка, куда писать
+					$toWrite = $discipline.' '.$type;//Что писать
+					$page->setCellValue($cell, $toWrite);//И записываем в ячейку
+				}
+			}
+			
+			
+			
+		}
+		
+		if ($bufContent != ''){//Если в буфере не пусто
+				//Пишем то что было в буфере
+				$cell = $this->getCellname($bufNum, $iRow);//чейка, куда писать
+				$toWrite = $bufContent;//Что писать
+				$page->setCellValue($cell, $toWrite);//И записываем в ячейку
+				$bufContent = '';//Очищаем буфер
+				$bufNum = '';//Очищаем буфер	
 			}
 		
 		
 		$objWriter = PHPExcel_IOFactory::createWriter($phpexcel, 'Excel2007');
-		$objWriter->save("test.xlsx");
+		$objWriter->save($tempFile);
 	}
 	
 	
