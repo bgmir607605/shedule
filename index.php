@@ -14,8 +14,8 @@
 <div id="content">
 	<h2>В процессе разработки</h2>
 	
-	<input type=date id="dateShedule" onChange="getAvailableSedule()"><br> <!--Дата-->
-	<select id="group" onFocus="showField('group')" onChange=getAvailableSedule()></select><br> <!--Группа-->
+	<input type=date id="dateShedule" onChange="getAvailableSedule()"><input type="button" value="Экспорт в Excel" onClick="exportExcel()"><br> <!--Дата-->
+	<select id="group" onFocus="getGroups()" onChange=getAvailableSedule()></select><br> <!--Группа-->
 
 <table>
    <tr>

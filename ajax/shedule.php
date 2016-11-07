@@ -22,10 +22,22 @@ switch ($action) {
 	case 'cleanBeforeWrite':
 		cleanBeforeWrite($mysqli);
         break;
+	case 'showGroup':
+		showGroup($mysqli);
+        break;
 
 };
 $mysqli->close();
 
+function showGroup($mysqli){
+	$query = "SELECT * FROM groups";
+	if ($result = $mysqli->query($query)) {
+		while ($row = $result->fetch_assoc()) {
+			echo '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+		}
+		$result->free();
+	}
+};
 
 //Возвращает список нагрузок с именами дисциплин в комбобоксы при выставлении расписания
 function getDisciplines($mysqli){
