@@ -37,7 +37,17 @@ function showTeacher($mysqli){
 };
 
 function showDiscipline($mysqli){
-	$query = "SELECT * FROM discipline order by shortName";
+	$group = $_POST["group"];
+	$specialtyId;
+	$query = "SELECT specialtyId FROM groups where id = $group";
+	if ($result = $mysqli->query($query)) {
+		while ($row = $result->fetch_assoc()) {
+			$specialtyId = $row["specialtyId"];
+		}
+		$result->free();
+	}
+	
+	$query = "SELECT * FROM discipline where shared = 1 or specialtyId = ". $specialtyId ." order by shortName";
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
 			echo '<option value="'.$row["id"].'">'.$row["shortName"].'</option>';

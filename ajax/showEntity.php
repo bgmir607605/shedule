@@ -40,9 +40,10 @@ function showTeacher($mysqli){
 //
 function showDiscipline($mysqli){
 	$query = "SELECT * FROM discipline order by fullName";
+	//uery = "SELECT *discipline.fullName,  by fullName";
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
-			echo $row["fullName"].' '.$row["shortName"].'<br/>';
+			echo $row["fullName"].' '.$row["shortName"].' '.$row["specialtyId"].'<br/>';
 		}
 	$result->free();
 	}
