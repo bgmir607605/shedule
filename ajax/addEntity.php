@@ -2,16 +2,16 @@
 require_once 'connectParams.php';
 $mysqli = new mysqli("localhost", $dbUser, $dbPass, $dbName);
 if ($mysqli->connect_errno) {
-    printf("Соединение не удалось: %s\n", $mysqli->connect_error);
-    exit();
+	printf("Соединение не удалось: %s\n", $mysqli->connect_error);
+	exit();
 };
 $query = "set names utf8";
 $mysqli->query($query);
 $entity = $_POST["entity"];
 switch ($entity) {
-    case 'teacher':
+	case 'teacher':
 		addTeacher($mysqli);
-        break;
+		break;
 	case 'discipline':
 		addDiscipline($mysqli);
         break;
@@ -40,7 +40,10 @@ function addTeacher($mysqli){
 function addDiscipline($mysqli){
 	$fullName = $_POST["fullName"];
 	$shortName = $_POST["shortName"];
-	$query = "insert into discipline (fullName, shortName) values ('".$fullName."', '".$shortName."')";
+	$shared = $_POST["shared"];
+	$specialty = $_POST["specialty"];
+	echo "$fullName $shortName $shared $specialty";
+	$query = "insert into discipline (fullName, shortName, shared, specialtyId) values ('".$fullName."', '".$shortName."', ".$shared.", ".$specialty.")";
 	$mysqli->query($query);
 	$query = "SELECT * FROM discipline";
 	

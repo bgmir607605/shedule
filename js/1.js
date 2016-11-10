@@ -36,28 +36,6 @@ function delTeacher(teacher){
 			}
 	});
 }
-
-//
-function addDiscipline(){
-	var fullName = $("#fullName").val();
-	var shortName = $("#shortName").val();
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/addEntity.php",
-			data: 'entity=discipline&fullName=' + fullName + '&shortName=' + shortName,
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				showEntity('discipline');
-				$("#fullName").val('');
-				$("#shortName").val('');
-				$('#fullName').focus();
-			}
-	});
-}
 //
 function addSpecialty(){
 	var code = $("#code").val();
