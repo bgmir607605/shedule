@@ -5,9 +5,9 @@
 <meta charset="utf-8"/>
 <link rel="stylesheet" href="my.css">
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="js/1.js"></script>
+<script type="text/javascript" src="js/teacherLoads.js"></script>
 </head>
-<body onLoad="showEntity('teacherLoad')">
+<body onLoad="showEntity()">
 <?php require_once 'menu.php'; ?>
 <div id="content">
 	<h2>Нагрузки</h2>
@@ -20,9 +20,9 @@
 			<td></td>
 		</tr>
 		<tr>
-			<td><select id="teacher" placeHolder="Преподаватель" onFocus="showField('teacher')"></select></td>
-			<td><select id="group" placeHolder="Группа" onFocus="showField('group')" ></select></td>
-			<td><select id="discipline" placeHolder="Дисциплина Модуль" onFocus="showField('discipline')"></select></td>
+			<td><select id="teacher" placeHolder="Преподаватель" onFocus="getTeachers()"></select></td>
+			<td><select id="group" placeHolder="Группа" onFocus="getGroups()" ></select></td>
+			<td><select id="discipline" placeHolder="Дисциплина Модуль" onFocus="showDisciplinesForGroup()"></select></td>
 			<td></td>
 		</tr>
 		</table>

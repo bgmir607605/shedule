@@ -81,30 +81,6 @@ function addGroup(){
 }
 
 
-function addTeacherLoad(){
-	var teacher = $("#teacher").val();
-	var group = $("#group").val();
-	var discipline = $("#discipline").val();
-	$.ajax({
-			async: false,			
-			type: "POST",
-			url: "./ajax/addEntity.php",
-			data: 'entity=teacherLoad&teacher=' + teacher + '&group=' + group + '&discipline=' + discipline,
-			dataType:"text",
-			error: function () {	
-				alert( "При считывании флага обновления произошла ошибка" );
-			},
-			success: function (response) {
-				showEntity('teacherLoad');
-				$("#teacher").val('');
-				$("#group").val('');
-				$("#discipline").val('');
-				$('#lName').focus();
-			}
-	});
-}
-//
-
 //Устанавливает список значений в комбобокс
 function showField(field) {
 	$.ajax({
