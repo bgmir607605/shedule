@@ -9,6 +9,29 @@
 	
 }
 
+function isTeacherDuplication(){
+	var date = $('#dateShedule').val();
+	if (date != ''){
+		$.ajax({
+			async: false,			
+			type: "POST",
+			url: "./ajax/teacherDuplication.php",
+			data: 'date=' + date,
+			dataType:"text",
+			error: function () {	
+				alert( "При считывании флага обновления произошла ошибка" );
+			},
+			success: function (response) {
+				alert(response);
+			}
+		});
+	}
+	else {
+		alert('укажите дату');
+	}
+	
+}
+
 function getGroups(){
 	var curValue = $('#group').val();
 	$.ajax({
