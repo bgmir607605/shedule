@@ -14,7 +14,8 @@
 <div id="content">
 	<h2>В процессе разработки</h2>
 	
-	<input type=date id="dateShedule" onChange="getAvailableSedule()"><input type="button" value="Экспорт в Excel" onClick="exportExcel()"><br> <!--Дата-->
+	<input type=date id="dateShedule" onChange="getAvailableSedule()"><input type="button" value="Экспорт в Excel" onClick="exportExcel()">
+	<input type="button" value="Дублирование преподавателя" onClick="isTeacherDuplication()"><br> <!--Дата-->
 	<select id="group" onFocus="getGroups()" onChange=getAvailableSedule()></select><br> <!--Группа-->
 
 <table>
