@@ -33,11 +33,30 @@ function showGroup($mysqli){
 	$query = "SELECT * FROM groups";
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
-			echo '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+			echo '<option '.availableSheduleForGroup($mysqli, $row["id"]).' value="'.$row["id"].'">'.$row["name"].'</option>';
 		}
 		$result->free();
 	}
 };
+
+
+function availableSheduleForGroup($mysqli, $groupId){
+    $date = $_POST["date"];
+    
+	//Получаем список нагрузок по указанной группе и дате
+	$i = 0;
+    $query = "select `teacherLoadId`, `number`, `type` from `shedule` where `teacherLoadId` 
+    IN (select `id` from `teacherLoad` where `groupId` ='" . $groupId . "') 
+	and `date` = '" . $date . "' ORDER BY `number`";
+	if ($result = $mysqli->query($query)) {
+        while ($row = $result->fetch_assoc()){
+		    $i++;
+		}
+        $result->free();
+	};
+	//if ($i > 0){echo 'class="available"';}
+	if ($i > 0){return 'class="available"';}
+}
 
 //Возвращает список нагрузок с именами дисциплин в комбобоксы при выставлении расписания
 function getDisciplines($mysqli){

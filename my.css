@@ -61,3 +61,7 @@
 	background-color: #97AF9D;
 	cursor: pointer;
 }
+
+.available{
+	background-color: green;
+}
