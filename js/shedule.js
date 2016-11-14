@@ -34,11 +34,12 @@ function isTeacherDuplication(){
 
 function getGroups(){
 	var curValue = $('#group').val();
+	var date = $('#dateShedule').val();
 	$.ajax({
 			async: false,			
 			type: "POST",
 			url: "./ajax/shedule.php",
-			data: 'action=showGroup',
+			data: 'action=showGroup&date=' + date,
 			dataType:"text",
 			error: function () {	
 				alert( "При считывании флага обновления произошла ошибка" );
