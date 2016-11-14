@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 19 2016 г., 15:58
--- Версия сервера: 5.5.50-0+deb8u1
--- Версия PHP: 5.6.24-0+deb8u1
+-- Время создания: Ноя 14 2016 г., 08:39
+-- Версия сервера: 5.5.52-0+deb8u1
+-- Версия PHP: 5.6.27-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- База данных: `backupBPT`
+-- База данных: `bpt`
 --
 
 -- --------------------------------------------------------
@@ -29,8 +29,21 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `discipline` (
 `id` int(11) NOT NULL,
   `shortName` varchar(50) DEFAULT NULL,
-  `fullName` varchar(150) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `fullName` varchar(150) DEFAULT NULL,
+  `shared` tinyint(1) NOT NULL,
+  `specialtyId` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `discipline`
+--
+
+INSERT INTO `discipline` (`id`, `shortName`, `fullName`, `shared`, `specialtyId`) VALUES
+(1, 'по специальности', 'Бред', 0, 1),
+(2, 'Общий', 'Бред', 1, NULL),
+(3, 'ОАиП', 'Основы алгоритмизации и программирования', 0, 1),
+(4, 'ОСй', 'Операционные системы и среды', 0, 1),
+(5, 'Для мех', 'Для мех', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -42,7 +55,17 @@ CREATE TABLE IF NOT EXISTS `groups` (
 `id` int(11) NOT NULL,
   `name` varchar(10) DEFAULT NULL,
   `specialtyId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `groups`
+--
+
+INSERT INTO `groups` (`id`, `name`, `specialtyId`) VALUES
+(1, '1 - 2 ТП', 1),
+(2, '3 - 4 ТП', 1),
+(3, '5 - 6 ДП', 1),
+(4, '1 - 2 АМ', 2);
 
 -- --------------------------------------------------------
 
@@ -69,7 +92,15 @@ CREATE TABLE IF NOT EXISTS `specialty` (
 `id` int(11) NOT NULL,
   `code` varchar(20) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `specialty`
+--
+
+INSERT INTO `specialty` (`id`, `code`, `name`) VALUES
+(1, '09.02.05', 'Прикладная информатика (по отраслям)'),
+(2, 'dad', 'Механники');
 
 -- --------------------------------------------------------
 
@@ -88,7 +119,16 @@ CREATE TABLE IF NOT EXISTS `teacherLoad` (
   `doneHLoad` int(11) DEFAULT NULL,
   `doneHPrLoad` int(11) DEFAULT NULL,
   `doneHConsLoad` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `teacherLoad`
+--
+
+INSERT INTO `teacherLoad` (`id`, `teacherId`, `groupId`, `disciplineId`, `hLoad`, `hPrLoad`, `hConsLoad`, `doneHLoad`, `doneHPrLoad`, `doneHConsLoad`) VALUES
+(1, 2, 1, 3, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 3, 4, 5, NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 2, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -101,7 +141,16 @@ CREATE TABLE IF NOT EXISTS `teachers` (
   `fName` varchar(20) DEFAULT NULL,
   `mName` varchar(20) DEFAULT NULL,
   `lName` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `teachers`
+--
+
+INSERT INTO `teachers` (`id`, `fName`, `mName`, `lName`) VALUES
+(1, 'Андрей', 'Алексеевич', 'Миронов'),
+(2, 'Алексей', 'Валерьевич', 'Колотилов'),
+(3, 'Дмитрий', 'Владимирович', 'Люлин');
 
 --
 -- Индексы сохранённых таблиц
@@ -111,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `teachers` (
 -- Индексы таблицы `discipline`
 --
 ALTER TABLE `discipline`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `specialtyId` (`specialtyId`);
 
 --
 -- Индексы таблицы `groups`
@@ -151,12 +200,12 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT для таблицы `discipline`
 --
 ALTER TABLE `discipline`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `groups`
 --
 ALTER TABLE `groups`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `shedule`
 --
@@ -166,17 +215,17 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT для таблицы `specialty`
 --
 ALTER TABLE `specialty`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `teacherLoad`
 --
 ALTER TABLE `teacherLoad`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `teachers`
 --
 ALTER TABLE `teachers`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
