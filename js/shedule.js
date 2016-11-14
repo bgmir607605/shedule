@@ -1,7 +1,7 @@
 ﻿function exportExcel(){
 	var date = $('#dateShedule').val();
 	if (date != ''){
-		window.location = "http://server-admin.bpt.loc/shedule/excel/test.php?date=" + date;
+		window.location = "./excel/test.php?date=" + date;
 	}
 	else {
 		alert('укажите дату');
