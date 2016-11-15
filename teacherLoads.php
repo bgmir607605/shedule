@@ -28,6 +28,14 @@
 		</table>
 	<input type="button" value="Добавить" onClick=addTeacherLoad()>
 	</form>
+	Фильтр:<br>
+	<select id = "filter" onChange="setCategoryFilter()">
+		<option>----</option>
+		<option value="teacherLoad.teacherId">По преподавателю</option>
+		<option value="teacherLoad.groupId">По группе</option>
+	</select>
+	<select id = "value" onFocus="setValFilterList()" onChange="showFilteredEntities()" disabled>
+	</select>
 <div id="teacherLoad">
 </div>
 </div>

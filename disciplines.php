@@ -29,6 +29,8 @@
 		</tr>
 		</table>
 	</form>
+<br /><input name="filter" type="radio" value="all" checked> Все
+<br /><input name="filter" type="radio" value="specialty"> По специальности
 <div id="discipline">
 
 

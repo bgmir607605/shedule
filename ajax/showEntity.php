@@ -72,10 +72,18 @@ function showGroup($mysqli){
 };
 
 function showTeacherLoad($mysqli){
+	//По умолчанию выводим все записи
+	$condition = '';
+	
+	//Если установлены фильтры - формируем условие
+	if (($_POST["filterCat"] != '') & ($_POST["filterVal"] != '')){
+		$condition = ' where '.$_POST["filterCat"].'='.$_POST["filterVal"];
+	}
+	
 	$query = "SELECT teacherLoad.id, teachers.lName, teachers.fName, teachers.mName, groups.name as 'group', discipline.shortName as 'discipline'  FROM teacherLoad 
 		JOIN teachers ON teachers.id = teacherLoad.teacherId
 		JOIN groups ON groups.id = teacherLoad.groupId
-		JOIN discipline ON discipline.id = teacherLoad.disciplineId order by teachers.lName";
+		JOIN discipline ON discipline.id = teacherLoad.disciplineId".$condition." order by teachers.lName";
 	if ($result = $mysqli->query($query)) {
 		while ($row = $result->fetch_assoc()) {
 			echo $row["lName"].' '.$row["fName"].' '.$row["mName"].' '.$row["group"].' '.$row["discipline"].'<br/>';
