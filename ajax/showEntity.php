@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'connectParams.php';
 $mysqli = new mysqli("localhost", $dbUser, $dbPass, $dbName);
 if ($mysqli->connect_errno) {
