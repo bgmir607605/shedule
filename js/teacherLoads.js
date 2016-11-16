@@ -41,12 +41,12 @@ function showDisciplinesForGroup() {
 }
 
 //Выводит список экземляров сущности из БД
-function showEntity() {
+function showEntity(filterCat ='', filterVal = '') {
 	$.ajax({
 			async: false,			
 			type: "POST",
 			url: "./ajax/showEntity.php",
-			data: 'entity=teacherLoad',
+			data: 'entity=teacherLoad&filterCat=' + filterCat + '&filterVal=' + filterVal,
 			dataType:"text",
 			error: function () {	
 				alert( "При считывании флага обновления произошла ошибка" );
@@ -60,7 +60,7 @@ function showEntity() {
 
 
 
-function getTeachers() {
+function getTeachers(field = 'teacher') {
 	$.ajax({
 			async: false,			
 			type: "POST",
@@ -71,12 +71,12 @@ function getTeachers() {
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#teacher').html(response);
+				$('#' + field).html(response);
 			}
 	});
 }
 
-function getGroups() {
+function getGroups(filter = 'group') {
 	$.ajax({
 			async: false,			
 			type: "POST",
@@ -87,7 +87,37 @@ function getGroups() {
 				alert( "При считывании флага обновления произошла ошибка" );
 			},
 			success: function (response) {
-				$('#group').html(response);
+				$('#' + filter).html(response);
 			}
 	});
+}
+
+function setCategoryFilter(){
+	var filterCat = $('#filter').val();
+	$('#value').html('');
+	if (filterCat != '----') {
+		$('#value').prop("disabled", false);
+		$('#teacherLoad').html(filterCat);
+	}
+	else{
+		$('#value').prop("disabled", true);
+		showEntity();
+	}
+}
+
+function setValFilterList(){
+	var filterCat = $('#filter').val();
+	if (filterCat == 'teacherLoad.teacherId') {
+		getTeachers('value');
+	}
+	else{
+		getGroups('value');
+	}
+}
+
+function showFilteredEntities(){
+	var filterCat = $('#filter').val();
+	var filterVal = $('#value').val();
+	$('#teacherLoad').html(filterCat + '=' + filterVal);
+	showEntity(filterCat, filterVal);
 }

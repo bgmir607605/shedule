@@ -8,6 +8,7 @@ echo '
 <li><a href="disciplines.php" >Дисциплины</a></li>
 <li><a href="groups.php" >Группы</a></li>
 <li><a href="teacherLoads.php" >Нагрузки</a></li>
+<li><a href="reports.php" >Отчёты</a></li>
 </ul>
 </div>';
 
